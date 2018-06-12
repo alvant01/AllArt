@@ -46,13 +46,11 @@ class Seguidos {
 		$app = App::getSingleton();
    	$conn = $app->conexionBd();
 
-    	$reg = sprintf ("SELECT count(S.id) FROM seguidos S WHERE S.id = '%s' AND S.idFollow = '%s" 
+    	$reg = sprintf ("SELECT count(S.id) FROM seguidos S WHERE S.id = %s AND S.idFollow = %s" 
         , $conn->real_escape_string($follower) 
         ,$conn->real_escape_string($follow));
-
         $rs =$conn->query($reg);
-
-        if ($rs == 0) //no sigue al usuario
+        if (empty($rs)) //no sigue al usuario
         {
           return false;
         }
@@ -82,12 +80,14 @@ class Seguidos {
     $app = App::getSingleton();
     $conn = $app->conexionBd();
 
-    $reg = sprintf("DELETE FROM seguidos S WHERES.id = '%s' AND S.idFollow = '%s"
+    $reg = sprintf("DELETE FROM seguidos S WHERE S.id = %s AND S.idFollow = %s"
       , $conn->real_escape_string($follower) 
       ,$conn->real_escape_string($follow));
-
+    echo $reg;
     $rs =$conn->query($reg);
 
+
+    echo $rs;
     return $rs;
   }
 
