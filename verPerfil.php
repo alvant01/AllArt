@@ -1,6 +1,7 @@
 <?php
 namespace es\ucm\fdi\aw;
 require_once __DIR__.'/includes/config.php';
+require_once __DIR__.'/javascript/jsFollow.js';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,22 @@ require_once __DIR__.'/includes/config.php';
   <title>Perfil</title>
 </head>
 <body>
+
+	<script type="text/javascript">
+		
+		function seguir(follow, follower, s)
+		{
+			if(s)
+			{
+				<input type='button' value='Unfollow' onclick= Seguidos::follow()/>;
+			}
+			else
+			{
+
+			}
+
+		}
+	</script>
 <div id="contenedor">
 <?php
 $nombreUsuario=htmlspecialchars(trim(strip_tags($_GET['usuario'])));
@@ -17,7 +34,28 @@ $app->doInclude('comun/cabecera.php');
 $app->doInclude('comun/sidebarIzq.php');
 ?>
 	<div id="contenido">
+		
+
+
     	<?php
+
+			
+			$user2 = Usuario::buscaUsuario($_SESSION['username']);
+
+			$id = $usuario->id();
+    	if(!Seguidos::alredyFollow($id, $user2->id()))
+    		{
+    			echo "<input type='button' value='Unfollow' onclick=' " . javascript/jsFollow/seguir($id,$user2->id(), true) . "'/>";
+    		}
+    		else
+    		{
+    			seguir($id,$user2->id(), false);
+    			//echo "<input type='button' value='Follow' onclick=' " .  . "'/>";
+    		}
+			//echo "<input type='button' value='Follow' onclick='seguir('". $id . "' , '" . $user2->id() . "');'/>";
+    		//echo '<script type="text/javascript">','seguir();','</script>';
+
+    
 			echo "<img src= '" . $usuario->imgPerfil() . "' border='0' width='100' height='100'>";
 			echo "</br>";
 			echo 'Nombre: ' . $usuario->username();
@@ -28,7 +66,7 @@ $app->doInclude('comun/sidebarIzq.php');
 			echo "</br>";
 			echo "Fecha nacimiento: " . $usuario->fechaNac();
 			echo "</br>";
-			$id = $usuario->id();
+			
 			$img = archivo::buscarImagenDest($id);
 			if ($img !== FALSE)
 			{
@@ -46,10 +84,10 @@ $app->doInclude('comun/sidebarIzq.php');
 			//
 			$arch = archivo::buscarMejoresArch($id);
 
-			if ($arch !== FALSE)
+			if ($arch !== FALSE ||empty($arch))
 			{
 				$ite = 0;
-				foreach($arch as $value )
+				foreach($arch as $value)
 				{
 					if ($ite == 10)
 					{
